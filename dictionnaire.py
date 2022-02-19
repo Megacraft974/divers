@@ -1,22 +1,19 @@
 from tkinter import*
 def ecrire(mot):
+    if len(mot) == 0 or not isinstance(mot, str):
+        return
     dico_mot=open("dico_mot.txt","a")
     dico_mot.write(str(mot)+"\n")
     dico_mot.close()
     
 def lire():
-    lecteur=open("dico_mot.txt","r")
-    lecture=lecteur.read()
-    print(lecture)
-    lecteur.close()
+    with open("dico_mot.txt","r") as lecteur:
+        print(lecteur.read())
 
 fen1=Tk()
-enregistrer=Label(fen1,text="Enregistre un mot:",fg="blue")
+Label(fen1,text="Enregistre un mot:",fg="blue").pack()
 recherche=Entry(fen1)
-affiche=Button(fen1,text="Consulter le dictionnaire.",command= lire())
-enregistrer.pack()
 recherche.pack()
-affiche.pack()
+Button(fen1, text="Enregistrer", command=lambda r=recherche:ecrire(recherche.get())).pack()
+Button(fen1,text="Consulter le dictionnaire.",command= lire).pack()
 fen1.mainloop()
-
-ecrire(recherche)

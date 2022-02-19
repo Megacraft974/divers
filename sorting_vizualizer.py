@@ -2,9 +2,6 @@ import random
 import pygame
 from time import sleep
 
-lenght = 100
-toSort = random.sample(range(0,lenght),lenght)
-
 def bubble_sort():
     global toSort
     loop = True
@@ -38,7 +35,7 @@ def partition(A, lo, hi):
     update((i,hi))
     return i
 
-def update(changes,temp=0.1):
+def update(changes,temp=0.01):
     global running
     if not running:
         return
@@ -47,17 +44,22 @@ def update(changes,temp=0.1):
         x, y = c*unitX, toSort[c]*unitY
         pygame.draw.rect(screen,(0,255,0),((x,0,2,sizeY)))
         pygame.display.flip()
-        rect = pygame.draw.rect(screen,(0,0,0),((x,0,2,sizeY)))
+        pygame.draw.rect(screen,(0,0,0),((x,0,2,sizeY)))
         color = baseColor
         color.hsva = (toSort[c]*unitColor,100,100,100)
-        pygame.draw.rect(screen, color, (x, sizeY, 2, -y))
+        pygame.draw.rect(screen, color, (x, sizeY-y, 2, y))
     sleep(temp)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            pygame.quit()
+            break
+
+lenght = 200
+toSort = random.sample(range(0,lenght),lenght)
 
 func = lambda: quicksort(toSort,0,len(toSort)-1)
-#func = bubble_sort
+# func = bubble_sort
 
 sizeX, sizeY = 1000,500
 unitX, unitY = (sizeX/len(toSort)), (sizeY/len(toSort))
@@ -71,10 +73,10 @@ screen.fill((0,0,0))
 update(toSort,0)
 pygame.display.flip()
 func()
-pygame.display.flip()
 
-while True:
+while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            running = False
             pygame.quit()
             break
